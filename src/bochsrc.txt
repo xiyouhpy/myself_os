@@ -1,0 +1,34 @@
+# --------------------------------------------------------------------
+# Bochs 配置文件
+# floppya.img和配置文件放在同一个文件夹
+# 在终端 cd 进入到该文件夹后执行 bochs 的命令：bochs -f bochsrc
+# --------------------------------------------------------------------
+
+# 指明内存配置单位：MB
+megs: 32
+
+# ROM文件
+romimage: file="$BXSHARE/BIOS-bochs-latest"
+vgaromimage: file="$BXSHARE/VGABIOS-lgpl-latest"
+
+# 软盘（指明要使用的软盘是floppy.img，1_44是软盘的大小？）
+floppya: 1_44=floppy.img, status=inserted	#这个是启动盘
+
+#boot: a
+
+# 说明启动设备为软盘
+boot: floppy
+
+# 存放log文件的文本
+log: bochsout.txt
+
+# 说明不启用鼠标
+mouse: enabled=0
+
+# 键盘启用 US 键盘映射
+keyboard_mapping: enabled=1, map="$BXSHARE/keymaps/x11-pc-us.map"
+
+# CPU配置
+clock: sync=realtime
+cpu: ips=500000
+
