@@ -1,0 +1,247 @@
+bochs安装
+
+1，包括源码编译安装和二进制文件安装，最终的目的都一样，文件都可以从http://sourceforge.net/projects/bochs/网站上下载得到。
+
+ 
+
+bochs使用
+
+   bochs安装完后在
+
+  /usr/bin ----可执行文件
+
+ /usr/share/bochs----romimage  keyboard_mappin 
+
+/usrshare/vgabios----vgaromimage
+
+/usr/lib/bochs
+
+/usr/bochs-init-----bochsrc所在地，配置文件
+
+   另外得到两个工具命令bximage和bochs
+
+bximage是制作镜像映射文件用的如;
+
+uestcer@uestcer-GA-MA78GM-S2H:~/skyeye/bochs-use/boot-grub$ bximage
+
+========================================================================
+
+                                bximage
+
+                  Disk Image Creation Tool for Bochs
+
+        $Id: bximage.c,v 1.34 2009/04/14 09:45:22 sshwarts Exp $
+
+========================================================================
+
+ 
+
+Do you want to create a floppy disk image or a hard disk image?
+
+Please type hd or fd. [hd] hd-----hd(硬盘)  fd(软盘)
+
+What kind of image should I create?
+
+Please type flat, sparse or growing. [flat] ---文件类型，没事默认就好了
+
+Enter the hard disk size in megabytes, between 1 and 129023
+
+[10] 100---要生成的文件大小，100MB
+
+I will create a 'flat' hard disk image with
+
+  cyl=203---柱面数
+
+  heads=16---磁头
+
+  sectors per track=63---扇区数
+
+  total sectors=204624
+
+  total size=99.91 megabytes
+
+What should I name the image?
+
+[c.img] disk.img---取个名
+
+Writing: [] Done.
+
+I wrote 104767488 bytes to disk.img.
+
+The following line should appear in your bochsrc:
+
+  ata0-master: type=disk, path="disk.img", mode=flat, cylinders=203, heads=16, spt=63
+
+uestcer@uestcer-GA-MA78GM-S2H:~/skyeye/bochs-use/boot-grub$ -----好了，生成了，也可以使用
+
+dd if=/dev/zero of=disk.img count=204624其中204624=63*16*203
+
+bochs，直接在terminal里面打上这个命令一般来说是木有反应的如
+
+uestcer@uestcer-GA-MA78GM-S2H:~/skyeye/bochs-use/test$ bochs
+
+========================================================================
+
+                       Bochs x86 Emulator 2.4.5
+
+              Build from CVS snapshot, on April 25, 2010
+
+========================================================================
+
+00000000000i[     ] LTDL_LIBRARY_PATH not set. using compile time default '/usr/lib/bochs/plugins'
+
+00000000000i[     ] BXSHARE not set. using compile time default '/usr/share/bochs'
+
+00000000000e[     ] Switching off quick start, because no configuration file was found.
+
+------------------------------
+
+Bochs Configuration: Main Menu
+
+------------------------------
+
+This is the Bochs Configuration Interface, where you can describe the
+
+machine that you want to simulate.  Bochs has already searched for a
+
+configuration file (typically called bochsrc.txt) and loaded it if it
+
+could be found.  When you are satisfied with the configuration, go
+
+ahead and start the simulation.
+
+You can also start bochs with the -q option to skip these menus.
+
+1. Restore factory default configuration
+
+2. Read options from...
+
+3. Edit options
+
+4. Save options to...
+
+5. Restore the Bochs state from...
+
+6. Begin simulation
+
+7. Quit now
+
+Please choose one: [2] ^C
+
+uestcer@uestcer-GA-MA78GM-S2H:~/skyeye/bochs-use/test$ -------原谅我传不上图片到这里来，
+
+，如果在在当前目录下有bochsrc文件那是你手多。
+
+新建一个名字叫bochsrc的文件，参照/usr/bochs-init-----bochsrc所在地，配置文件 弄一个你中意的内容
+
+config_interface: textconfig
+
+display_library: sdl
+
+romimage: file=/usr/share/bochs/BIOS-bochs-latest, address=0xf0000
+
+megs: 32
+
+vgaromimage: file=/usr/share/vgabios/vgabios.bin
+
+floppya: 1_44=/dev/fd0, status=inserted
+
+ata0: enabled=1, ioaddr1=0x1f0, ioaddr2=0x3f0, irq=14
+
+ata1: enabled=0, ioaddr1=0x170, ioaddr2=0x370, irq=15
+
+ata2: enabled=0, ioaddr1=0x1e8, ioaddr2=0x3e0, irq=11
+
+ata3: enabled=0, ioaddr1=0x168, ioaddr2=0x360, irq=9
+
+#ata0-master: type=disk, path="", mode=flat, cylinders=1024, heads=16, spt=63
+
+ata0-slave: type=cdrom, path="/dev/cdrom", status=inserted
+
+boot: cdrom
+
+ips: 1000000
+
+floppy_bootsig_check: disabled=0
+
+log: /dev/stdout
+
+panic: action=ask
+
+error: action=report
+
+info: action=report
+
+debug: action=ignore
+
+debugger_log: -
+
+com1: enabled=1, dev=/dev/ttyS0
+
+parport1: enabled=1, file="/dev/lp0"
+
+sb16: midimode=1, midi=/dev/midi00, wavemode=1, wave=/dev/dsp, loglevel=2, log=/dev/stdout, dmatimer=600000
+
+vga_update_interval: 300000
+
+keyboard_serial_delay: 250
+
+keyboard_paste_delay: 100000
+
+floppy_command_delay: 500
+
+mouse: enabled=1
+
+private_colormap: enabled=0
+
+#ne2k: ioaddr=0x240, irq=9, mac=b0:c4:20:00:00:00, ethmod=linux, ethdev=eth0
+
+#keyboard_mapping: enabled=0, map=/usr/share/bochs/keymaps/x11-pc-de.map
+
+#keyboard_type: mf
+
+#user_shortcut: keys=ctrlaltdel
+
+#magic_break: enabled=1
+
+#cmosimage: cmos.img
+
+#load32bitOSImage: os=nullkernel, path=../kernel.img, iolog=../vga_io.log
+
+#load32bitOSImage: os=linux, path=../linux.img, iolog=../vga_io.log, initrd=../initrd.img
+
+#i440fxsupport: enabled=1
+
+usb1: enabled=1, ioaddr=0xFF80, irq=10
+
+#text_snapshot_check: enable
+
+------保存，敲入 bochs恭喜你还是没有特别的反应，，，，
+
+uestcer@uestcer-GA-MA78GM-S2H:~/skyeye/bochs-use/test$ bochs
+
+========================================================================
+
+                       Bochs x86 Emulator 2.4.5
+
+              Build from CVS snapshot, on April 25, 2010
+
+========================================================================
+
+00000000000i[     ] LTDL_LIBRARY_PATH not set. using compile time default '/usr/lib/bochs/plugins'
+
+00000000000i[     ] BXSHARE not set. using compile time default '/usr/share/bochs'
+
+00000000000i[     ] reading configuration from bochsrc
+
+00000000000p[     ] >>PANIC<< bochsrc:16: directive 'ips' not understood--这里改成 cpu:count=1,ips=100000--cpu的选项就行
+
+00000000000e[CTRL ] notify called, but no bxevent_callback function is registered
+
+00000000000i[CTRL ] quit_sim called with exit code 1
+
+uestcer@uestcer-GA-MA78GM-S2H:~/skyeye/bochs-use/test$ ^C
+
+uestcer@uestcer-GA-MA78GM-S2H:~/skyeye/bochs-use/test$ ----到了这里，酱紫，quit了。
+
+为什么呢？bochs需要几个条件，bochs命令在PATH中（你也可以使用绝对路径），当前目录下有bochsrc名字的配置文件，隐藏的也行，在配置文件中挂名的虚拟硬盘或软盘文件，虚拟文件中有bootloader，然后是有bootloader能引导的kernel，然后呢？，，然后就坐等 进到桌面，当然你也可以在调试模式下慢慢来。不清楚可以看这里http://bochs.sourceforge.net/doc/docbook/user/index.html
