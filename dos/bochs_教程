@@ -1,0 +1,9 @@
+在一行的最前面加上“#”表示注释
+内存，以MB为单位 megs: 16
+
+#下面两行软盘，我们将操作系统放在软盘里，大小是任意的。一般是1.44或2.88。
+romimage: file=../BOIS-bochs-latest, address=0xf0000
+vgaromimage:file=../VGABIOS-lgpl-latest
+
+flppya:2_88=test.img, status=inserted
+#flppyb:1_44=floppyb.img, status=inserted，我们的硬盘是img格式的。是用bximage.exe这个工具生成的
