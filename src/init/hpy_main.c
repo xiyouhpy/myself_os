@@ -16,6 +16,9 @@ int hpy_main()
 {
 	monitor_clear();
 	monitor_write("hello world!\n");
+	init_gdt();
+	init_idt();
+	asm volatile ("int $0x3");
 	
 	return 0;
 }
