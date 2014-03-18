@@ -14,10 +14,17 @@
 
 int hpy_main()
 {
-	monitor_clear();
-	monitor_write("hello world!\n");
+	// 初始化全局段描述符表
 	init_gdt();
+	// 初始化全局中断描述符表
 	init_idt();
+	
+	// 清屏
+	monitor_clear();
+	printk_color(rc_black, rc_red, "***********************************\n");
+	printk_color(rc_black, rc_red, "*     Hello, everyone.    *\n");
+	printk_color(rc_black, rc_red, "***********************************\n\n");
+	printk_color(rc_black, rc_blue, "This is a kernel and the auther is Hanpeiyan.\n\n");
 	asm volatile ("int $0x3");
 	
 	return 0;
